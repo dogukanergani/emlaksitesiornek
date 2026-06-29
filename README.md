@@ -1,36 +1,98 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Anka Emlak — Next.js 15 + MongoDB + Admin
 
-## Getting Started
+Next.js 15 (App Router) · TypeScript · Tailwind v4 · framer-motion ·
+MongoDB (Mongoose) · Cloudinary · zod + react-hook-form.
 
-First, run the development server:
+## Kurulum
 
 ```bash
+npm install
+cp .env.example .env        # değerleri doldurun
+npm run seed                # (opsiyonel) örnek ilanları yükle
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Ortam Değişkenleri (.env)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+| Değişken | Açıklama |
+| --- | --- |
+| `MONGODB_URI` | MongoDB bağlantı adresi |
+| `ADMIN_PASSWORD` | Admin paneli giriş şifresi |
+| `ADMIN_SESSION_SECRET` | Oturum token'ı secret'ı (opsiyonel) |
+| `CLOUDINARY_CLOUD_NAME` / `CLOUDINARY_API_KEY` / `CLOUDINARY_API_SECRET` | Görsel yükleme |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Mimari
 
-## Learn More
+```
+app/
+  page.tsx                 Anasayfa (force-dynamic, ilanlar Mongo'dan)
+  ilanlarim/page.tsx       Sunucu tarafı, kategoriye duyarlı filtreleme
+  admin/login/page.tsx     Şifre korumalı giriş
+  admin/page.tsx           Panel (korumalı)
+  admin/add-property/      İlan ekleme formu (korumalı)
+  api/admin/
+    login | logout         Oturum cookie'si
+    upload                 Cloudinary görsel yükleme
+    properties             İlan kaydetme (zod doğrulamalı)
+lib/
+  mongodb.ts               Cache'li Mongoose bağlantısı
+  models/Property.ts       Mongoose şeması
+  properties.ts            Mongo veri erişimi (getProperties, createProperty…)
+  data.ts                  Statik testimonials + stats
+  filters.ts               Kategoriye göre fiyat skalası + query parser
+  validators.ts            Paylaşılan zod şeması (form + API)
+  auth.ts                  Edge-uyumlu oturum token'ı (HMAC)
+  admin-guard.ts           API route'ları için oturum kontrolü
+  cloudinary.ts            Cloudinary SDK yapılandırması
+middleware.ts              /admin/* koruması
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Güvenlik
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+`/admin/*` rotaları `middleware.ts` ile korunur; oturum yoksa `/admin/login`'e
+yönlendirilir. Giriş, `ADMIN_PASSWORD` ile doğrulanır ve httpOnly bir cookie'ye
+HMAC tabanlı token yazar. API route'ları ayrıca `isAdminRequest()` ile kontrol
+edilir (çift katman).
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Filtreleme Mantığı
 
-## Deploy on Vercel
+`lib/filters.ts` kategoriye göre fiyat aralığını belirler:
+- **Kiralık** → aylık kira (5.000 – 50.000 TL)
+- **Satılık** → toplam fiyat (1.000.000 – 30.000.000 TL)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Arayüzdeki slider kategori değişince otomatik yeniden ölçeklenir; "Filtrele"
+URL query'sini günceller ve sayfa sunucu tarafında MongoDB'yi yeniden sorgular.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## İlan Verisi
+
+İlanlar artık `lib/data.ts` yerine MongoDB'den gelir (`lib/properties.ts`).
+Admin panelinden eklenen ilanlar Cloudinary'ye yüklenip veritabanına kaydedilir
+ve anında Anasayfa/İlanlarımız sayfalarında görünür.
+
+## İlan Detayı & Admin CRUD (güncelleme)
+
+- `/ilanlarim/[slug]` — herkese açık ilan detay sayfası (görsel galerisi,
+  özellikler, açıklama, WhatsApp/ara CTA'ları).
+- `/admin/properties` — tüm ilanların listesi; her satırda Düzenle / Sil.
+- `/admin/edit-property/[id]` — mevcut ilanı düzenleme (aynı PropertyForm,
+  prefill + PUT).
+- `PUT /api/admin/properties/[id]` ve `DELETE /api/admin/properties/[id]`
+  (zod doğrulamalı, admin korumalı).
+
+İlan ekleme ve düzenleme aynı `components/admin/PropertyForm.tsx` bileşenini
+kullanır (propertyId verilince PUT, verilmeyince POST).
+
+## Güncelleme: Ev/Arsa, Medya, Salon, Kira Filtresi
+
+- **Kira filtresi:** kiralık maksimum 1.000.000 TL (lib/filters.ts).
+- **Ana kategori (kind):** "Ev" veya "Arsa". Arsa seçilince oda/banyo/salon
+  gizlenir, İmar Durumu + Ada/Parsel alanları çıkar. Zorunluluklar hem
+  Mongoose (koşullu required) hem Zod (superRefine) tarafında yönetilir.
+- **Medya:** kapak fotoğrafı + ekstra fotoğraflar (çoklu) + video (URL veya
+  dosya). Yükleme Cloudinary'de `resource_type: "auto"` ile yapılır. Detay
+  sayfası galeri + video oynatıcı gösterir.
+- **Salon sayısı (livingRooms):** modele, Zod'a, forma ve detay sayfasına eklendi.
+- **Hakkımızda:** yan yana (grid), tek ekrana sığan (above the fold) yeni tasarım.
+
+Not: Önceki `components/about/WhyUs.tsx` artık kullanılmıyor (Hakkımızda
+yeniden tasarlandı); dilerseniz silebilirsiniz.

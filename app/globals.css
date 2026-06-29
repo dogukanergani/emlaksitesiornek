@@ -1,26 +1,93 @@
 @import "tailwindcss";
 
+/*
+  TASARIM SİSTEMİ
+  ---------------
+  Marka kimliği: güvenilir, sakin, "premium" bir emlak markası.
+  - forest : ana marka rengi (koyu yeşil → toprak/mülk çağrışımı)
+  - clay   : sıcak vurgu rengi (badge / öne çıkan aksiyonlar, az kullanılır)
+  - sand   : sıcak açık zemin
+  - ink    : neredeyse-siyah metin
+  Tüm bileşenler bu tokenları kullanır; tek yerden tema değişebilir.
+*/
+
+@theme {
+  /* Renkler */
+  --color-forest-50: #eef4f1;
+  --color-forest-100: #d6e5dd;
+  --color-forest-600: #1e4d3b;
+  --color-forest-700: #163a2c;
+  --color-forest-900: #0f2820;
+
+  --color-ink: #13211b;
+  --color-sand: #f7f5f0;
+  --color-stone: #6b7a73;
+
+  --color-clay-500: #c2703d;
+  --color-clay-600: #a85e30;
+
+  /* Tipografi (next/font ile layout.tsx içinde değişkenler atanır) */
+  --font-display: var(--font-sora), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+
+  /* Yumuşatılmış köşe & gölge tokenları */
+  --radius-xl2: 1.25rem;
+}
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  color-scheme: light;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--color-sand);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Erişilebilirlik: hareket azaltma tercihine saygı */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Fiyat aralığı (dual range) slider thumb stilleri */
+.range-input {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  background: transparent;
+  -webkit-appearance: none;
+  appearance: none;
+}
+.range-input::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  pointer-events: auto;
+  height: 20px;
+  width: 20px;
+  border-radius: 9999px;
+  background: var(--color-forest-600);
+  border: 3px solid #fff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+}
+.range-input::-moz-range-thumb {
+  pointer-events: auto;
+  height: 20px;
+  width: 20px;
+  border-radius: 9999px;
+  background: var(--color-forest-600);
+  border: 3px solid #fff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
 }
