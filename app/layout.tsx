@@ -6,6 +6,7 @@ import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import FloatingWhatsApp from "@/components/ui/FloatingWhatsApp";
 import { siteConfig } from "@/lib/config";
+import { ACTIVE_THEME } from "@/theme.config";
 
 // Display fontu (başlıklar) — globals.css içindeki --font-sora değişkenine bağlanır
 const sora = Sora({
@@ -33,7 +34,11 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="tr" className={`${sora.variable} ${inter.variable}`}>
+    <html
+      lang="tr"
+      data-theme={ACTIVE_THEME}
+      className={`${sora.variable} ${inter.variable}`}
+    >
       <body className="flex min-h-screen flex-col">
         <TopBar />
         <Navbar />

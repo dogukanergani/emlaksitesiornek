@@ -1,8 +1,7 @@
-import Image from "next/image";
-import { Star, Quote } from "lucide-react";
 import { getTestimonials } from "@/lib/data";
+import TestimonialsCarousel from "./TestimonialsCarousel";
 
-// Server Component: müşteri yorumlarını data.ts'ten çeker ve map eder.
+// Server Component: yorumları data.ts'ten çeker, client carousel'e aktarır.
 export default async function Testimonials() {
   const testimonials = await getTestimonials();
 
@@ -17,47 +16,8 @@ export default async function Testimonials() {
         </h2>
       </div>
 
-      <div className="mt-12 grid gap-6 md:grid-cols-3">
-        {testimonials.map((t) => (
-          <figure
-            key={t.id}
-            className="relative flex flex-col rounded-xl2 bg-white p-6 shadow-sm ring-1 ring-black/5"
-          >
-            <Quote className="h-8 w-8 text-forest-100" aria-hidden />
-
-            {/* Yıldız puanı */}
-            <div className="mt-2 flex gap-0.5" aria-label={`${t.rating}/5 puan`}>
-              {Array.from({ length: 5 }).map((_, i) => (
-                <Star
-                  key={i}
-                  className={`h-4 w-4 ${
-                    i < t.rating
-                      ? "fill-clay-500 text-clay-500"
-                      : "text-stone/30"
-                  }`}
-                />
-              ))}
-            </div>
-
-            <blockquote className="mt-4 flex-1 text-sm leading-relaxed text-stone">
-              “{t.comment}”
-            </blockquote>
-
-            <figcaption className="mt-6 flex items-center gap-3 border-t border-black/5 pt-4">
-              <Image
-                src={t.avatarUrl}
-                alt={t.name}
-                width={44}
-                height={44}
-                className="h-11 w-11 rounded-full object-cover"
-              />
-              <div>
-                <p className="text-sm font-semibold text-ink">{t.name}</p>
-                <p className="text-xs text-stone">{t.role}</p>
-              </div>
-            </figcaption>
-          </figure>
-        ))}
+      <div className="mt-12">
+        <TestimonialsCarousel testimonials={testimonials} />
       </div>
     </section>
   );

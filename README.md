@@ -96,3 +96,24 @@ kullanır (propertyId verilince PUT, verilmeyince POST).
 
 Not: Önceki `components/about/WhyUs.tsx` artık kullanılmıyor (Hakkımızda
 yeniden tasarlandı); dilerseniz silebilirsiniz.
+
+## Config Tabanlı Tema Sistemi
+
+Kök dizindeki `theme.config.ts` içindeki `ACTIVE_THEME` değerini değiştirin:
+
+```ts
+export const ACTIVE_THEME: ThemeId = "tema-2"; // tüm site Lüks temaya geçer
+```
+
+Temalar (renk slot'ları `app/globals.css` içinde `[data-theme="..."]` ile tanımlı):
+- `tema-1` Varsayılan (yeşil) — mevcut tasarım, birebir korunur
+- `tema-2` Lüks (koyu kömür + altın/bronz, fildişi zemin)
+- `tema-3` Doğa (orman yeşili + terracotta, bej zemin)
+- `tema-4` Modern (grafit + dinamik turuncu, gri zemin)
+- `tema-5` Minimal (siyah + koyu gri, beyaz zemin)
+
+Çalışma mantığı: Bileşenler hep aynı utility'leri (`bg-forest-600`, `text-clay-500`,
+`bg-sand`…) kullanır. Bunlar `var(--color-*)` değişkenlerine bağlıdır; her tema bu
+değişkenleri yeniden değerler. `<html data-theme>` niteliği `theme.config.ts`'ten
+gelir, böylece veritabanı gerekmez. Yeni tema eklemek için globals.css'e bir
+`[data-theme="tema-6"]{…}` bloğu ve config tipine `'tema-6'` eklemeniz yeterli.

@@ -11,8 +11,8 @@ export default function HomePage() {
   return (
     <>
       <Hero />
-      <Features />
       <FeaturedListings />
+      <Features />
       <Stats />
       <Testimonials />
     </>

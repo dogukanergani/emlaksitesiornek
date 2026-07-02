@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { Search, MapPin } from "lucide-react";
+import { Search, MapPin, ArrowRight } from "lucide-react";
 import type { PropertyCategory } from "@/lib/types";
 import { quickCategories } from "@/lib/config";
 
@@ -25,7 +25,7 @@ export default function Hero() {
   }
 
   return (
-    <section className="relative flex min-h-[620px] items-center overflow-hidden lg:min-h-[700px]">
+    <section className="relative flex min-h-screen items-center overflow-hidden">
       {/* Arka plan görseli — next/image ile optimize, LCP için priority */}
       <Image
         src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=2000&q=80"
@@ -96,8 +96,19 @@ export default function Hero() {
           </div>
         </div>
 
-        {/* Hızlı kategori filtreleri (badges) */}
-        <div className="mt-5 flex flex-wrap items-center gap-2">
+        {/* Ana CTA + hızlı kategori filtreleri (badges) */}
+        <div className="mt-6 flex flex-wrap items-center gap-3">
+          <Link
+            href="/ilanlarim"
+            className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 font-semibold text-forest-700 shadow-lg shadow-forest-900/20 transition-transform hover:scale-[1.03]"
+          >
+            Tüm İlanları Gör
+            <ArrowRight className="h-4 w-4" />
+          </Link>
+        </div>
+
+        {/* Hızlı erişim kategorileri */}
+        <div className="mt-4 flex flex-wrap items-center gap-2">
           <span className="text-sm text-white/60">Hızlı erişim:</span>
           {quickCategories.map((cat) => (
             <Link

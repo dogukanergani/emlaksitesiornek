@@ -38,6 +38,92 @@
   color-scheme: light;
 }
 
+/*
+  TEMA KATMANLARI
+  ---------------
+  Her tema, @theme'de tanımlı renk değişkenlerini (slot'ları) yeniden değerler.
+  Bileşenler hep aynı utility'leri (bg-forest-600, text-clay-500, bg-sand...)
+  kullanır; yalnızca bu değişkenlerin değerleri temaya göre değişir.
+  data-theme niteliği <html> üzerinde theme.config.ts'ten gelir.
+
+  Slot anlamları:
+    forest-600/700/900 → birincil renk (buton/koyu bölümler), 900 = koyu zemin
+    forest-50/100      → açık tint (ikon çipi, hover zemini)
+    clay-500/600       → vurgu rengi
+    sand               → sayfa zemini (her temada AÇIK kalır)
+    ink / stone        → ana metin / soluk metin
+*/
+
+/* Tema 1 — Varsayılan (mevcut yeşil). Değerler @theme ile birebir aynı. */
+:root[data-theme="tema-1"] {
+  --color-forest-50: #eef4f1;
+  --color-forest-100: #d6e5dd;
+  --color-forest-600: #1e4d3b;
+  --color-forest-700: #163a2c;
+  --color-forest-900: #0f2820;
+  --color-ink: #13211b;
+  --color-sand: #f7f5f0;
+  --color-stone: #6b7a73;
+  --color-clay-500: #c2703d;
+  --color-clay-600: #a85e30;
+}
+
+/* Tema 2 — Lüks: koyu (kömür-siyah) birincil + altın/bronz vurgu, fildişi zemin */
+:root[data-theme="tema-2"] {
+  --color-forest-50: #f2ede3;
+  --color-forest-100: #e6dcc6;
+  --color-forest-600: #1c1a16;
+  --color-forest-700: #100e0b;
+  --color-forest-900: #0a0907;
+  --color-ink: #14110c;
+  --color-sand: #f6f1e7;
+  --color-stone: #726a5b;
+  --color-clay-500: #b08d4f;
+  --color-clay-600: #927039;
+}
+
+/* Tema 3 — Doğa: orman yeşili birincil + terracotta vurgu, sıcak bej zemin */
+:root[data-theme="tema-3"] {
+  --color-forest-50: #edf2e9;
+  --color-forest-100: #d7e6c9;
+  --color-forest-600: #3a5a2c;
+  --color-forest-700: #2b4321;
+  --color-forest-900: #1a2a14;
+  --color-ink: #20271b;
+  --color-sand: #f4efe4;
+  --color-stone: #6f7160;
+  --color-clay-500: #a9683f;
+  --color-clay-600: #8a5230;
+}
+
+/* Tema 4 — Modern: grafit/slate birincil + dinamik turuncu vurgu, gri zemin */
+:root[data-theme="tema-4"] {
+  --color-forest-50: #eceef1;
+  --color-forest-100: #dce0e6;
+  --color-forest-600: #2b3440;
+  --color-forest-700: #1f2630;
+  --color-forest-900: #12161c;
+  --color-ink: #161a1f;
+  --color-sand: #f1f2f4;
+  --color-stone: #6b7480;
+  --color-clay-500: #f97316;
+  --color-clay-600: #ea580c;
+}
+
+/* Tema 5 — Minimal: siyah birincil + koyu gri vurgu, beyaz zemin */
+:root[data-theme="tema-5"] {
+  --color-forest-50: #f3f3f3;
+  --color-forest-100: #e6e6e6;
+  --color-forest-600: #141414;
+  --color-forest-700: #000000;
+  --color-forest-900: #0a0a0a;
+  --color-ink: #0a0a0a;
+  --color-sand: #ffffff;
+  --color-stone: #6b6b6b;
+  --color-clay-500: #3f3f3f;
+  --color-clay-600: #262626;
+}
+
 body {
   background-color: var(--color-sand);
   color: var(--color-ink);
