@@ -30,13 +30,24 @@ export default function Footer() {
             href="/"
             className="flex items-center gap-2 font-display text-xl font-bold text-white"
           >
-            <span className="grid h-9 w-9 place-items-center rounded-xl bg-white/10">
-              <Building2 className="h-5 w-5" />
-            </span>
-            {siteConfig.name}
+            {siteConfig.logoUrl ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={siteConfig.logoUrl}
+                alt={siteConfig.siteName}
+                className="h-9 w-auto"
+              />
+            ) : (
+              <>
+                <span className="grid h-9 w-9 place-items-center rounded-xl bg-white/10">
+                  <Building2 className="h-5 w-5" />
+                </span>
+                {siteConfig.siteName}
+              </>
+            )}
           </Link>
           <p className="mt-4 max-w-sm text-sm leading-relaxed text-forest-50/70">
-            {siteConfig.description}
+            {siteConfig.footerDescription}
           </p>
 
           <div className="mt-6 flex gap-3">
@@ -108,7 +119,7 @@ export default function Footer() {
       <div className="border-t border-white/10">
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-3 px-4 py-6 text-xs text-forest-50/60 sm:flex-row sm:px-6 lg:px-8">
           <p>
-            © {year} {siteConfig.name}. Tüm hakları saklıdır.
+            © {year} {siteConfig.siteName}. Tüm hakları saklıdır.
           </p>
           <div className="flex gap-6">
             <Link href="#" className="transition-colors hover:text-white">

@@ -6,7 +6,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Search, MapPin, ArrowRight } from "lucide-react";
 import type { PropertyCategory } from "@/lib/types";
-import { quickCategories } from "@/lib/config";
+import { quickCategories, siteConfig } from "@/lib/config";
 
 const tabs: { value: PropertyCategory; label: string }[] = [
   { value: "satilik", label: "Satılık" },
@@ -42,7 +42,7 @@ export default function Hero() {
 
       <div className="relative mx-auto w-full max-w-6xl px-4 py-16 sm:px-6 lg:px-8">
         <p className="font-medium uppercase tracking-[0.2em] text-clay-500">
-          Anka Emlak
+          {siteConfig.siteName}
         </p>
         <h1 className="mt-3 max-w-2xl font-display text-4xl font-bold leading-[1.1] text-white sm:text-5xl lg:text-6xl">
           Hayalinizdeki eve giden yol burada başlar.

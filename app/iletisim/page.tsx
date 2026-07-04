@@ -41,11 +41,13 @@ export default function ContactPage() {
         ))}
       </div>
 
-      {/* Google Maps — Ankara merkezli (API anahtarı gerektirmeyen embed) */}
+      {/* Google Maps — şehir config'ten (API anahtarı gerektirmeyen embed) */}
       <div className="mt-10 overflow-hidden rounded-xl2 ring-1 ring-black/5">
         <iframe
-          title="Anka Emlak konum — Ankara"
-          src="https://maps.google.com/maps?q=Ankara%2C%20Turkey&z=12&output=embed"
+          title={`${siteConfig.siteName} konum — ${siteConfig.city}`}
+          src={`https://maps.google.com/maps?q=${encodeURIComponent(
+            siteConfig.city
+          )}&z=12&output=embed`}
           width="100%"
           height="420"
           style={{ border: 0 }}

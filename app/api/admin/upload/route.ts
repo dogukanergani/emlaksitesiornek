@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import cloudinary from "@/lib/cloudinary";
 import { isAdminRequest } from "@/lib/admin-guard";
+import { siteConfig } from "@/config/site";
+import { slugify } from "@/lib/utils";
 
 // Cloudinary SDK Node runtime gerektirir
 export const runtime = "nodejs";
@@ -26,7 +28,7 @@ export async function POST(request: Request) {
 
   try {
     const result = await cloudinary.uploader.upload(dataUri, {
-      folder: "anka-emlak/properties",
+      folder: `${slugify(siteConfig.siteName)}/properties`,
       resource_type: "auto", // görsel veya video
     });
     return NextResponse.json({ url: result.secure_url });

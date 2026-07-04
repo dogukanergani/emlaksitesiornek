@@ -28,7 +28,7 @@ export default async function AboutPage() {
             Doğru evi doğru insanla buluşturuyoruz
           </h1>
           <p className="mt-4 leading-relaxed text-stone">
-            {siteConfig.name}, satılık ve kiralık gayrimenkulde uzmanlaşmış bir
+            {siteConfig.siteName}, satılık ve kiralık gayrimenkulde uzmanlaşmış bir
             danışmanlık markasıdır. İlan araştırmasından sözleşmeye kadar tüm
             süreçte, şeffaf ve güvenli bir deneyim sunarız.
           </p>
@@ -70,7 +70,7 @@ export default async function AboutPage() {
         <div className="relative aspect-[4/3] overflow-hidden rounded-xl2 ring-1 ring-black/5 lg:aspect-auto lg:h-[28rem]">
           <Image
             src="https://images.unsplash.com/photo-1582407947304-fd86f028f716?auto=format&fit=crop&w=1400&q=80"
-            alt="Anka Emlak ekibi ve ofisi"
+            alt={`${siteConfig.siteName} ekibi ve ofisi`}
             fill
             priority
             sizes="(max-width: 1024px) 100vw, 50vw"

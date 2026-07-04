@@ -51,7 +51,7 @@ export default async function PropertyDetailPage({
   const waMessage = encodeURIComponent(
     `Merhaba, "${property.title}" ilanı hakkında bilgi almak istiyorum.`
   );
-  const waHref = `https://wa.me/${siteConfig.whatsapp}?text=${waMessage}`;
+  const waHref = `https://wa.me/${siteConfig.whatsappNumber}?text=${waMessage}`;
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:px-8">

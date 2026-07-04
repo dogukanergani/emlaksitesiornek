@@ -23,7 +23,7 @@ export default async function AdminLoginPage({
             <Building2 className="h-6 w-6" />
           </span>
           <h1 className="mt-4 font-display text-xl font-bold text-ink">
-            {siteConfig.name} Yönetim
+            {siteConfig.siteName} Yönetim
           </h1>
           <p className="mt-1 text-sm text-stone">
             Devam etmek için yönetici şifresini girin.

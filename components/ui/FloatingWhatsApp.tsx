@@ -8,7 +8,7 @@ export default function FloatingWhatsApp() {
   const message = encodeURIComponent(
     "Merhaba, ilanlarınız hakkında bilgi almak istiyorum."
   );
-  const href = `https://wa.me/${siteConfig.whatsapp}?text=${message}`;
+  const href = `https://wa.me/${siteConfig.whatsappNumber}?text=${message}`;
 
   return (
     <a

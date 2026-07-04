@@ -7,6 +7,7 @@ import {
   HeartHandshake,
   type LucideIcon,
 } from "lucide-react";
+import { siteConfig } from "@/lib/config";
 
 interface Advantage {
   Icon: LucideIcon;
@@ -38,7 +39,7 @@ const advantages: Advantage[] = [
   {
     Icon: MapPinned,
     title: "Yerel Uzmanlık",
-    text: "Ankara ve çevresindeki mahalleleri sokak sokak biliyoruz.",
+    text: `${siteConfig.city} ve çevresindeki mahalleleri sokak sokak biliyoruz.`,
   },
   {
     Icon: HeartHandshake,

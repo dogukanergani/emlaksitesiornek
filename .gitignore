@@ -1,13 +1,17 @@
-# Next.js 
 /node_modules
 /.next/
 /out/
 /build
+*.pem
+.env*
+!.env.example
+.DS_Store
+*.tsbuildinfo
+next-env.d.ts
 
-# Şifreler
-.env.local
 
-# Claude ve Test Dosyaları
+# Ajans ve Test Dosyaları
 CLAUDE.md
 AGENTS.md
+WHITELABEL.md
 test.js

@@ -22,10 +22,21 @@ export default function Navbar() {
           className="flex items-center gap-2 font-display text-lg font-bold text-ink"
           onClick={() => setOpen(false)}
         >
-          <span className="grid h-9 w-9 place-items-center rounded-xl bg-forest-600 text-white">
-            <Building2 className="h-5 w-5" />
-          </span>
-          {siteConfig.name}
+          {siteConfig.logoUrl ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={siteConfig.logoUrl}
+              alt={siteConfig.siteName}
+              className="h-9 w-auto"
+            />
+          ) : (
+            <>
+              <span className="grid h-9 w-9 place-items-center rounded-xl bg-forest-600 text-white">
+                <Building2 className="h-5 w-5" />
+              </span>
+              {siteConfig.siteName}
+            </>
+          )}
         </Link>
 
         {/* Masaüstü menü */}
