@@ -1,8 +1,5 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import { SlidersHorizontal } from "lucide-react";
 import type { PropertyCategory, PropertyType } from "@/lib/types";
 import { typeLabels } from "@/lib/format";
 import { PRICE_RANGES } from "@/lib/filters";
@@ -18,62 +15,42 @@ function formatTL(value: number) {
 
 interface FilterBarProps {
   category: PropertyCategory;
-  type?: PropertyType;
-  query?: string;
+  type: PropertyType | "";
   minPrice: number;
   maxPrice: number;
+  onCategoryChange: (category: PropertyCategory) => void;
+  onTypeChange: (type: PropertyType | "") => void;
+  onPriceChange: (minPrice: number, maxPrice: number) => void;
 }
 
 /**
  * Kategoriye duyarlı filtre çubuğu.
- * - Kategori (Satılık/Kiralık) değiştiğinde fiyat skalası otomatik güncellenir.
- * - "Filtrele" URL query'sini günceller; sayfa sunucu tarafında yeniden sorgular.
+ * Tamamen kontrollü (controlled) bileşen: state üst bileşende tutulur, her
+ * değişiklik anında yukarı bildirilir ve liste anlık olarak yeniden filtrelenir.
  */
 export default function FilterBar({
-  category: initialCategory,
-  type: initialType,
-  query: initialQuery,
-  minPrice: initialMin,
-  maxPrice: initialMax,
+  category,
+  type,
+  minPrice,
+  maxPrice,
+  onCategoryChange,
+  onTypeChange,
+  onPriceChange,
 }: FilterBarProps) {
-  const router = useRouter();
-
-  const [category, setCategory] = useState<PropertyCategory>(initialCategory);
-  const [type, setType] = useState<PropertyType | "">(initialType ?? "");
-  const [query, setQuery] = useState(initialQuery ?? "");
-
   const range = PRICE_RANGES[category];
-  const [minPrice, setMinPrice] = useState(initialMin);
-  const [maxPrice, setMaxPrice] = useState(initialMax);
-
-  // Kategori değişince fiyat skalasını yeni aralığa sıfırla
-  useEffect(() => {
-    setMinPrice(range.min);
-    setMaxPrice(range.max);
-  }, [category, range.min, range.max]);
 
   const onMin = (v: number) =>
-    setMinPrice(Math.min(v, maxPrice - range.step));
+    onPriceChange(Math.min(v, maxPrice - range.step), maxPrice);
   const onMax = (v: number) =>
-    setMaxPrice(Math.max(v, minPrice + range.step));
+    onPriceChange(minPrice, Math.max(v, minPrice + range.step));
 
   const fillLeft = ((minPrice - range.min) / (range.max - range.min)) * 100;
   const fillRight =
     100 - ((maxPrice - range.min) / (range.max - range.min)) * 100;
 
-  function applyFilters() {
-    const params = new URLSearchParams();
-    params.set("category", category);
-    if (type) params.set("type", type);
-    if (query.trim()) params.set("q", query.trim());
-    params.set("min", String(minPrice));
-    params.set("max", String(maxPrice));
-    router.push(`/ilanlarim?${params.toString()}`);
-  }
-
   return (
     <div className="rounded-xl2 bg-white p-4 shadow-sm ring-1 ring-black/5 sm:p-6">
-      <div className="grid gap-6 lg:grid-cols-[auto_1fr_1.2fr_auto] lg:items-end">
+      <div className="grid gap-6 lg:grid-cols-[auto_1fr_1.2fr] lg:items-end">
         {/* 1) Kategori toggle */}
         <div>
           <label className="mb-2 block text-xs font-semibold uppercase tracking-wide text-stone">
@@ -84,7 +61,7 @@ export default function FilterBar({
               <button
                 key={c}
                 type="button"
-                onClick={() => setCategory(c)}
+                onClick={() => onCategoryChange(c)}
                 className={`rounded-md px-4 py-2 text-sm font-semibold transition-colors ${
                   category === c
                     ? "bg-forest-600 text-white shadow-sm"
@@ -108,7 +85,7 @@ export default function FilterBar({
           <select
             id="filter-type"
             value={type}
-            onChange={(e) => setType(e.target.value as PropertyType | "")}
+            onChange={(e) => onTypeChange(e.target.value as PropertyType | "")}
             className="w-full rounded-lg border border-black/10 bg-white px-3 py-2.5 text-sm text-ink outline-none transition-colors focus:border-forest-600"
           >
             <option value="">Tümü</option>
@@ -158,16 +135,6 @@ export default function FilterBar({
             />
           </div>
         </div>
-
-        {/* 4) Filtrele */}
-        <button
-          type="button"
-          onClick={applyFilters}
-          className="flex h-[42px] items-center justify-center gap-2 rounded-lg bg-forest-600 px-5 text-sm font-semibold text-white transition-colors hover:bg-forest-700"
-        >
-          <SlidersHorizontal className="h-4 w-4" />
-          Filtrele
-        </button>
       </div>
     </div>
   );
